@@ -10,7 +10,8 @@ module.exports = function() {
 		 */
 		createUser(user) {
 			user.id = crypto.randomBytes(20).toString('hex'); // fast enough for our purpose
-			this.userList.push(user);
+			user.online = false
+			this.userList.push({id:user.id, title:user.title, password: user.password, online:false});
 			return 1;            
 		},
 		/*
@@ -50,7 +51,7 @@ module.exports = function() {
 			});
 			if(userIndex !== -1) {
 				this.userList[userIndex].title = user.title;
-				this.userList[userIndex].year = user.year;
+				this.userList[userIndex].password = user.password;
 				return 1;
 			}
 			else {
@@ -62,24 +63,32 @@ module.exports = function() {
 		 * Login user	
 		 */
 		loginUser(user) {
-			this.userList.forEach(function(element, index){
-				if(element.name == user.name && element.password == user.password){
-					this.userList[index].online = true
-					return element
-				}
-			})
+			var userIndex = this.userList.findIndex(element => {
+				return (element.title === user.title && element.password === user.password);
+			});
+			if(userIndex !== -1) {
+				this.userList[userIndex].online = true
+				return this.userList[userIndex]
+			}
+			else {
+				return 0;
+			}
 		},
 
 		/*
 		 * Login user	
 		 */
 		logoutUser(id) {
-			this.userList.forEach(function(element, index){
-				if(element.id == id){
-					this.userList[index].online = false
-					return element
-				}
-			})
+			var userIndex = this.userList.findIndex(element => {
+				return element.id === id;
+			});
+			if(userIndex !== -1) {
+				this.userList[userIndex].online = false
+				return this.userList[userIndex]
+			}
+			else {
+				return 0;
+			}
 		} 
 		         
 	}
