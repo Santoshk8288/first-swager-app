@@ -18,18 +18,137 @@ consumes:
 produces:
   - application/json
 paths:
-  /adduser:
-    x-swagger-router-controller: user
+  # /adduser:
+  #   x-swagger-router-controller: user
+  #   post:
+  #     operationId: createUser
+  #     description: add a new user to the list
+  #     parameters:
+  #       - name: title
+  #         description: user properties
+  #         in: body
+  #         required: true
+  #         schema:
+  #           $ref: "#/definitions/User"
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           $ref: "#/definitions/GeneralResponse"
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  # /listusers:
+  #   x-swagger-router-controller: user
+  #   get:
+  #     operationId: getAllUsers
+  #     description: get the users list
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           $ref: "#/definitions/GetUsersListResponse"
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  # /login:
+  #   x-swagger-router-controller: user
+  #   post:
+  #     operationId: loginUser
+  #     description: check user 
+  #     parameters:
+  #       - name: title
+  #         description: user properties
+  #         in: body
+  #         required: true
+  #         schema:
+  #           $ref: "#/definitions/loginUser"
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           $ref: "#/definitions/GetLoginResponse"
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  # /logout:
+  #   x-swagger-router-controller: user
+  #   post:
+  #     operationId: logoutUser
+  #     description: logout user 
+  #     parameters:
+  #       - name: title
+  #         description: user properties
+  #         in: body
+  #         required: true
+  #         schema:
+  #           $ref: "#/definitions/logoutUser"
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           $ref: "#/definitions/GetLogoutResponse"
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  # /updateuser:
+  #   x-swagger-router-controller: user
+  #   post:
+  #     operationId: updateUser
+  #     description: add a new user to the list
+  #     parameters:
+  #       - name: title
+  #         description: user properties
+  #         in: body
+  #         required: true
+  #         schema:
+  #           $ref: "#/definitions/UpdateUser"
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           $ref: "#/definitions/GeneralResponse"
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  # /deleteuser:
+  #   x-swagger-router-controller: user
+  #   post:
+  #     operationId: deleteUser
+  #     description: delete user 
+  #     parameters:
+  #       - name: title
+  #         description: user properties
+  #         in: body
+  #         required: true
+  #         schema:
+  #           $ref: "#/definitions/deleteUser"
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           $ref: "#/definitions/GetRemovedUser"
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  /addrestaurant:
+    x-swagger-router-controller: restaurant
     post:
-      operationId: createUser
-      description: add a new user to the list
+      operationId: addRestaurant
+      description: add a new restaurant to the list
       parameters:
-        - name: title
+        - name: name
           description: user properties
           in: body
           required: true
           schema:
-            $ref: "#/definitions/User"
+            $ref: "#/definitions/Restaurant"
       responses:
         "200":
           description: Success
@@ -39,100 +158,40 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /listusers:
-    x-swagger-router-controller: user
+  /findrestaurantsbyname/{name}:
+    x-swagger-router-controller: restaurant
     get:
-      operationId: getAllUsers
-      description: get the users list
+      operationId: findRestaurantsByName
+      description: add a new restaurant to the list
+      parameters:
+        - name: name
+          type: string
+          in: path
+          required: true
       responses:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/GetUsersListResponse"
+            $ref: "#/definitions/GetRestaurantListResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /login:
-    x-swagger-router-controller: user
-    post:
-      operationId: loginUser
-      description: check user 
+  /addmeal/{restaurantId}:
+    x-swagger-router-controller: restaurant
+    get:
+      operationId: addMeal
+      description: add a new restaurant to the list
       parameters:
-        - name: title
-          description: user properties
-          in: body
+        - name: restaurantId
+          type: string
+          in: path
           required: true
-          schema:
-            $ref: "#/definitions/loginUser"
       responses:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/GetLoginResponse"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  /logout:
-    x-swagger-router-controller: user
-    post:
-      operationId: logoutUser
-      description: logout user 
-      parameters:
-        - name: title
-          description: user properties
-          in: body
-          required: true
-          schema:
-            $ref: "#/definitions/logoutUser"
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: "#/definitions/GetLogoutResponse"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  /updateuser:
-    x-swagger-router-controller: user
-    post:
-      operationId: updateUser
-      description: add a new user to the list
-      parameters:
-        - name: title
-          description: user properties
-          in: body
-          required: true
-          schema:
-            $ref: "#/definitions/UpdateUser"
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: "#/definitions/GeneralResponse"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  /deleteuser:
-    x-swagger-router-controller: user
-    post:
-      operationId: deleteUser
-      description: delete user 
-      parameters:
-        - name: title
-          description: user properties
-          in: body
-          required: true
-          schema:
-            $ref: "#/definitions/deleteUser"
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: "#/definitions/GetRemovedUser"
+            $ref: "#/definitions/AddMeal"
         default:
           description: Error
           schema:
@@ -140,91 +199,91 @@ paths:
   /swagger:
     x-swagger-pipe: swagger_raw
 definitions:
-  User:
-    type: object
-    properties:
-      title:
-        type: string
-        description: task object name
-      password:
-        type: string
-        description: task description
-      cpassword:
-        type: string
-        description: task description
-  GetUsersListResponse:
-    required:
-      - users
-    properties:
-      users:
-        type: array
-        items: 
-          type: object
-          properties:
-            id:
-              type: string
-            title:
-              type: string
-  loginUser:
-    type: object
-    properties:
-      title:
-        type: string
-        description: task object name
-      password:
-        type: string
-        description: task description
-  GetLoginResponse:
-    type: object
-    properties:
-      title:
-        type: string
-        description: task object name
-      login:
-        type: string
-        description: task description
-  logoutUser:
-    type: object
-    properties:
-      id:
-        type: string
-        description: task object name
-  GetLogoutResponse:
-    type: object
-    properties:
-      title:
-        type: string
-        description: task object name
-      login:
-        type: string
-        description: task description
-  UpdateUser:
-    type: object
-    properties:
-      id:
-        type: string
-        description: id
-      title:
-        type: string
-        description: task object name
-      password:
-        type: string
-        description: task description
-  deleteUser:
-    type: object
-    properties:
-      id:
-        type: string
-        description: task object name
-  GetRemovedUser:
-    type: object
-    properties:
-      title:
-        type: string
-        description: task object name
-      login:
-        type: string
-        description: task description
+  # User:
+  #   type: object
+  #   properties:
+  #     title:
+  #       type: string
+  #       description: task object name
+  #     password:
+  #       type: string
+  #       description: task description
+  #     cpassword:
+  #       type: string
+  #       description: task description
+  # GetUsersListResponse:
+  #   required:
+  #     - users
+  #   properties:
+  #     users:
+  #       type: array
+  #       items: 
+  #         type: object
+  #         properties:
+  #           id:
+  #             type: string
+  #           title:
+  #             type: string
+  # loginUser:
+  #   type: object
+  #   properties:
+  #     title:
+  #       type: string
+  #       description: task object name
+  #     password:
+  #       type: string
+  #       description: task description
+  # GetLoginResponse:
+  #   type: object
+  #   properties:
+  #     title:
+  #       type: string
+  #       description: task object name
+  #     login:
+  #       type: string
+  #       description: task description
+  # logoutUser:
+  #   type: object
+  #   properties:
+  #     id:
+  #       type: string
+  #       description: task object name
+  # GetLogoutResponse:
+  #   type: object
+  #   properties:
+  #     title:
+  #       type: string
+  #       description: task object name
+  #     login:
+  #       type: string
+  #       description: task description
+  # UpdateUser:
+  #   type: object
+  #   properties:
+  #     id:
+  #       type: string
+  #       description: id
+  #     title:
+  #       type: string
+  #       description: task object name
+  #     password:
+  #       type: string
+  #       description: task description
+  # deleteUser:
+  #   type: object
+  #   properties:
+  #     id:
+  #       type: string
+  #       description: task object name
+  # GetRemovedUser:
+  #   type: object
+  #   properties:
+  #     title:
+  #       type: string
+  #       description: task object name
+  #     login:
+  #       type: string
+  #       description: task description
   GeneralResponse:
     type: object
     properties:
@@ -237,6 +296,27 @@ definitions:
     required:
       - success
       - description
+  Restaurant: 
+    type: object
+    properties:
+      title:
+        type: string
+        description: Restaurant  name
+  GetRestaurantListResponse:
+    properties:
+      id:
+        type: string
+      data:
+        type: object
+        properties:
+          name: 
+            type: string
+          mealList: 
+            type: object
+          orderlist: 
+            type: object
+          id:
+            type: string
   ErrorResponse:
     required:
       - message
