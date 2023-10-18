@@ -1,51 +1,112 @@
-'use strict';
-	var db = require('../../config/userService')();
+	var User = require('../../config/userService');
 	module.exports = {getAllUsers, createUser, getUserById, updateUser, deleteUser, loginUser, logoutUser};
 	
-	function getAllUsers(req, res, next) {
-	  res.json({ users: db.getUserById()});
-	}
 	
 	function createUser(req, res, next) {
-		res.json({success: db.createUser(req.body), description: "User added to the list!"});
+		var user = req.body
+		User.createUser(user, function(err, user){
+			if(err){
+				res.status(204).send();
+			}
+			else{
+				if(user){
+					res.json(user)
+				}
+				else{
+					res.json('User cannot be created')
+				}
+			}
+		})
+	}
+
+	function getAllUsers(req, res, next) {
+	  User.getAllUsers(function(err, user){
+	  	if(err){
+				res.status(204).send();
+			}
+			else{
+				if(user){
+					res.json(user)
+				}
+				else{
+					res.json('no user found')
+				}
+			}
+	  })
 	}
 	
 	function getUserById(req, res, next) {
 		var id = req.swagger.params.id.value; 
-		var user = db.getUserById(id);
-		if(user) {
-			res.json(user);
-		}else {
-			res.status(204).send();
-		}        
+		User.getUserById(id, function(err, user){
+			if(err){
+				res.status(204).send();
+			}
+			else{
+				if(user){
+					res.json(user)
+				}
+				else{
+					res.json('no user found')
+				}
+			}
+		});
+	}
+	
+	function loginUser(req, res, next){
+		var user = req.body
+		User.loginUser(user, function(err, user){
+			if(err){
+				res.status(204).send();
+			}
+			else{
+				if(user){
+					res.json(user)
+				}
+				else{
+					res.json('no user found')
+				}
+			}
+		})
+	}
+
+	function deleteUser(req, res, next) {
+		var id = req.body.id; 
+		User.deleteUser(id, function(err, user){
+			if(err){
+				res.status(204).send();
+			}
+			else{
+				if(user){
+					res.json(user)
+				}
+				else{
+					res.json('user not deleted')
+				}
+			}
+		})
 	}
 	
 	function updateUser(req, res, next) {
-		var id = req.body.id;
-		if(db.updateUser(id,req.body)){
-			res.json({success: 1, description: "user updated!"});
-		}else{
-			res.status(204).send();
-		}
+		var user = req.body
+		User.updateUser(user, function(err, user){
+			if(err){
+				res.status(204).send();
+			}
+			else{
+				if(user){
+					
+					res.json(user)
+				}
+				else{
+					res.json('user not updated')
+				}
+			}
+		})
 	}
 	
-	function deleteUser(req, res, next) {
-		var id = req.body.id; 
-		if(db.deleteUser(id)){
-			res.json({success: 1, description: "user deleted!"});
-		}else{
-			res.status(204).send();
-		}
-	}
+	
 
-	function loginUser(req, res, next){
-		var user = db.loginUser(req.body)
-		if(user) {
-      res.json(user);
-    }else {
-      res.status(204).send();
-    } 
-	}
+
 
 	function logoutUser(req, res, next){
 		var user = db.logoutUser(req.body.id)

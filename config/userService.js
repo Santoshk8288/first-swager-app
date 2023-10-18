@@ -1,94 +1,58 @@
-'use strict;'
-//Include crypto to generate the movie id
-var crypto = require('crypto');
 
-module.exports = function() {
-	return {
-		userList : [],
-		/*
-		 * Save the user inside the "db".
-		 */
-		createUser(user) {
-			user.id = crypto.randomBytes(20).toString('hex'); // fast enough for our purpose
-			user.online = false
-			this.userList.push({id:user.id, title:user.title, password: user.password, online:false});
-			return 1;            
-		},
-		/*
-		 * Retrieve a user with a given id or return all the movies if the id is undefined.
-		 */
-		getUserById(id) {
-			if(id) {
-				return this.userList.find(element => {
-					return element.id === id;
-				});    
-			}
-			else {
-				return this.userList;
-			}
-		},
-		/*
-		 * Delete a user with the given id.
-		 */
-		deleteUser(id) {
-			var found = 0;
-			this.userList = this.userList.filter(element => {
-					if(element.id === id) {
-						found = 1;
-					}
-					else {
-						return element.id !== id;
-					}
-				});
-			return found;            
-		},
-		/*
-		 * Update a user with the given id
-		 */
-		updateUser(id, user) {
-			var userIndex = this.userList.findIndex(element => {
-				return element.id === id;
-			});
-			if(userIndex !== -1) {
-				this.userList[userIndex].title = user.title;
-				this.userList[userIndex].password = user.password;
-				return 1;
-			}
-			else {
-				return 0;
-			}
-		},
-
-		/*
-		 * Login user	
-		 */
-		loginUser(user) {
-			var userIndex = this.userList.findIndex(element => {
-				return (element.title === user.title && element.password === user.password);
-			});
-			if(userIndex !== -1) {
-				this.userList[userIndex].online = true
-				return this.userList[userIndex]
-			}
-			else {
-				return 0;
-			}
-		},
-
-		/*
-		 * Login user	
-		 */
-		logoutUser(id) {
-			var userIndex = this.userList.findIndex(element => {
-				return element.id === id;
-			});
-			if(userIndex !== -1) {
-				this.userList[userIndex].online = false
-				return this.userList[userIndex]
-			}
-			else {
-				return 0;
-			}
-		} 
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/cedrick', {useNewUrlParser: true});
+// Genre Schema
+const userSchema = mongoose.Schema({
+	first_name:{
+		type: String,
+		required: true
+	},
+	last_name:{
+		type: String,
+		required: true
+	},
+	email:{
+		type: String,
+		required: true
+	},
+	password:{
+		type: String,
+		required: true
+	},
+	create_date:{
+		type: Date,
+		default: Date.now
 	}
-};  
+});
+
+const User = module.exports = mongoose.model('user', userSchema);
+
+module.exports.createUser = function(user, callback){
+	User.create(user, callback)
+}
+
+module.exports.getAllUsers = function(callback){
+	User.find(callback);
+}
+
+module.exports.getUserById = function(id, callback){
+	User.findById(id, callback);
+}
+
+module.exports.loginUser = function(user, callback){
+	var query = {email: user.email, password:user.password}
+	User.find(query, callback);
+}
+
+module.exports.updateUser = function(user, callback){
+	var find = {'_id': user.id}
+	var set = {$set:{first_name: user.first_name, last_name: user.last_name, email: user.email, password: user.password}}
+	User.updateOne(find, set, {upsert: true}, callback)
+}
+
+module.exports.deleteUser = function(id, callback){
+	var query = {'_id':id}
+	User.deleteOne(query, callback) 
+}
+
+
